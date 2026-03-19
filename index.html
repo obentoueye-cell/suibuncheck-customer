@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>まつげ水分チェック | iu.</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
+    background-color: #f5f3ef;
+    color: #2d3748;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+  .header {
+    background-color: #1a2233;
+    padding: 52px 24px 44px;
+    text-align: center;
+  }
+  .header-badge {
+    display: inline-block;
+    border: 1px solid rgba(201,169,110,0.6);
+    color: #c9a96e;
+    font-size: 10px;
+    letter-spacing: 3px;
+    padding: 5px 16px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .header h1 span { color: #8ab4c9; }
+  .header-sub {
+    color: rgba(255,255,255,0.4);
+    font-size: 11px;
+    margin-top: 10px;
+    letter-spacing: 2px;
+  }
+  .section { padding: 32px 18px 0; }
+  .section-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #5b8fa8;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .section-lead {
+    text-align: center;
+    font-size: 13px;
+    color: #718096;
+    margin-bottom: 20px;
+  }
+  .checklist { display: flex; flex-direction: column; gap: 10px; }
+  .check-item {
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: border-color 0.2s, background-color 0.2s;
+    user-select: none;
+  }
+  .check-item.checked { background-color: #eaf3f8; border-color: #5b8fa8; }
+  .check-box {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid #ccd9e0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f3ef;
+    transition: all 0.2s;
+  }
+  .check-item.checked .check-box { background-color: #5b8fa8; border-color: #5b8fa8; }
+  .check-icon { opacity: 0; transition: opacity 0.2s; }
+  .check-item.checked .check-icon { opacity: 1; }
+  .check-num { font-size: 10px; font-weight: 700; color: #a0b4c0; letter-spacing: 1px; min-width: 18px; flex-shrink: 0; }
+  .check-item.checked .check-num { color: #5b8fa8; }
+  .check-text { font-size: 13.5px; line-height: 1.5; color: #2d3748; }
+
+.count-area {
+margin: 28px 18px 0;
+background-color: #ffffff;
+border-radius: 20px;
+padding: 28px 22px;
+text-align: center;
+box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.count-label { font-size: 10px; letter-spacing: 3px; color: #a0aec0; margin-bottom: 10px; }
+.count-row { display: flex; align-items: baseline; justify-content: center; gap: 4px; margin-bottom: 16px; }
+.count-num { font-size: 68px; font-weight: 700; line-height: 1; color: #1a2233; }
+.count-of { font-size: 20px; color: #a0aec0; }
+.progress-bar { height: 8px; background-color: #e8edf2; border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+.progress-fill { height: 100%; width: 0%; border-radius: 8px; background-color: #5b8fa8; transition: width 0.4s ease, background-color 0.4s; }
+.result-badge { display: inline-block; padding: 8px 22px; border-radius: 30px; font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+.badge-default { background-color: #eef2f5; color: #a0aec0; }
+.badge-ok  { background-color: #e6f5ee; color: #4a9970; }
+.badge-mid { background-color: #fdf3e0; color: #b8822a; }
+.badge-ng  { background-color: #fdeae4; color: #d0593a; }
+.result-desc { font-size: 13px; color: #718096; line-height: 1.9; min-height: 50px; }
+.result-desc strong { color: #1a2233; font-weight: 700; }
+
+.advice-section { margin: 24px 18px 0; background-color: #1a2233; border-radius: 20px; padding: 28px 22px; }
+.advice-eyebrow { font-size: 10px; letter-spacing: 3px; color: #8ab4c9; margin-bottom: 14px; }
+.advice-headline { font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 18px; line-height: 1.6; }
+.advice-item { display: flex; gap: 12px; font-size: 13px; color: rgba(255,255,255,0.82); line-height: 1.6; margin-bottom: 12px; }
+.advice-item:last-child { margin-bottom: 0; }
+.dot { width: 6px; height: 6px; background-color: #8ab4c9; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+
+.message-section { margin: 24px 18px 0; background: linear-gradient(135deg, #c5dce8, #eaf3f8); border-radius: 20px; padding: 28px 22px; }
+.message-eyebrow { font-size: 10px; letter-spacing: 3px; color: #5b8fa8; margin-bottom: 14px; }
+.message-body { font-size: 14px; line-height: 2.1; color: #1a2233; }
+.message-body strong { font-weight: 700; }
+
+.cta-section { margin: 28px 18px 0; text-align: center; }
+.cta-eyebrow { font-size: 10px; letter-spacing: 4px; color: #a0aec0; margin-bottom: 4px; }
+.cta-brand { font-size: 32px; font-weight: 700; color: #1a2233; letter-spacing: 6px; margin-bottom: 4px; }
+.cta-sub { font-size: 11px; color: #a0aec0; margin-bottom: 22px; }
+.cta-btn {
+display: block;
+background-color: #1a2233;
+color: #ffffff;
+text-decoration: none;
+padding: 17px 32px;
+border-radius: 14px;
+font-size: 14px;
+font-weight: 700;
+letter-spacing: 1px;
+width: 100%;
+text-align: center;
+border: none;
+cursor: pointer;
+font-family: inherit;
+}
+.reset-btn {
+display: block;
+margin: 14px auto 0;
+background: none;
+border: 1px solid #d0dce6;
+color: #a0aec0;
+padding: 10px 28px;
+border-radius: 10px;
+font-size: 12px;
+cursor: pointer;
+font-family: inherit;
+}
+</style>
+
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">iu. original check</div>
+  <h1>あなたのまつげ<br><span>水分状態</span>チェック</h1>
+  <div class="header-sub">10 QUESTIONS · 1 MIN</div>
+</div>
+
+<div class="section">
+  <div class="section-title">CHECK LIST</div>
+  <div class="section-lead">当てはまるものを全部タップしてね👇</div>
+  <div class="checklist">
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg class="check-icon" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-num">01</span><span class="check-text">1日500ml以下しか水を飲まない</span></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg class="check-icon" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-num">02</span><span class="check-text">喉が渇いてから飲むことが多い</span></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg class="check-icon" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-num">03</span><span class="check-text">カフェイン（コーヒー・お茶）をよく飲む</span></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg class="check-icon" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-num">04</span><span class="check-text">冷たい飲み物が多い</span></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg class="check-icon" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-num">05</span><span class="check-text">目が乾きやすい・ドライアイ</span></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg class="check-icon" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-num">06</span><span class="check-text">目をぎゅっと閉じるクセがある</span></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg class="check-icon" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-num">07</span><span class="check-text">花粉やアレルギーがある</span></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg class="check-icon" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-num">08</span><span class="check-text">まつげが細い・バラつきやすい</span></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg class="check-icon" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-num">09</span><span class="check-text">エクステの持ちが安定しない</span></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg class="check-icon" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-num">10</span><span class="check-text">朝起きた時、目元が乾燥してる感じがある</span></div>
+  </div>
+</div>
+
+<div class="count-area">
+  <div class="count-label">YOUR SCORE</div>
+  <div class="count-row"><span class="count-num" id="countNum">0</span><span class="count-of">/ 10</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="result-badge badge-default" id="resultBadge">チェックしてね✨</div>
+  <div class="result-desc" id="resultDesc">上のリストをタップしながら確認してみよう</div>
+</div>
+
+<div class="advice-section">
+  <div class="advice-eyebrow">FIRST STEP ADVICE</div>
+  <div class="advice-headline">まずこれだけやってみて💧</div>
+  <div class="advice-item"><div class="dot"></div><span>1日1〜1.5Lを【こまめに】飲む</span></div>
+  <div class="advice-item"><div class="dot"></div><span>一気飲みじゃなく少量ずつ分ける</span></div>
+  <div class="advice-item"><div class="dot"></div><span>常温〜ぬるめがベスト</span></div>
+  <div class="advice-item"><div class="dot"></div><span>施術前後は特に意識して🙏</span></div>
+</div>
+
+<div class="message-section">
+  <div class="message-eyebrow">FROM iu.</div>
+  <div class="message-body">
+    まつげって<br>
+    ケアより前に<strong>【水分状態】</strong>がめっちゃ大事です🌊<br><br>
+    ここ整うだけで<br>
+    持ちや仕上がりが変わる人ほんま多いです✨<br><br>
+    自分に合うやり方知りたい方は<br>
+    一度まつげ見させてください☺️
+  </div>
+</div>
+
+<div class="cta-section">
+  <div class="cta-eyebrow">EYELASH SALON</div>
+  <div class="cta-brand">iu.</div>
+  <div class="cta-sub">京都 / アイリスト 澤井郁歩</div>
+  <a class="cta-btn" href="https://www.instagram.com/iu.ikuho_eye?igsh=N2prM2Nxb3Ywb3R3&utm_source=qr" target="_blank" rel="noopener noreferrer">👉 インスタプロフィールから予約</a>
+  <button class="reset-btn" onclick="resetAll()">リセットする</button>
+</div>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle('checked');
+    updateResult();
+  }
+  function updateResult() {
+    var n = document.querySelectorAll('.check-item.checked').length;
+    document.getElementById('countNum').textContent = n;
+    var fill = document.getElementById('progressFill');
+    fill.style.width = (n / 10 * 100) + '%';
+    var badge = document.getElementById('resultBadge');
+    var desc = document.getElementById('resultDesc');
+    if (n === 0) {
+      badge.className = 'result-badge badge-default';
+      badge.textContent = 'チェックしてね✨';
+      desc.innerHTML = '上のリストをタップしながら確認してみよう';
+      fill.style.backgroundColor = '#5b8fa8';
+    } else if (n <= 2) {
+      badge.className = 'result-badge badge-ok';
+      badge.textContent = '💧 水分OK';
+      desc.innerHTML = '<strong>現状キープで大丈夫！</strong><br>この調子で続けてね🙌';
+      fill.style.backgroundColor = '#6aab8c';
+    } else if (n <= 5) {
+      badge.className = 'result-badge badge-mid';
+      badge.textContent = '⚠️ 軽度インナードライ';
+      desc.innerHTML = '<strong>まつげの土台が少し不安定な状態。</strong><br>持ちや仕上がりに影響が出始めるゾーンです';
+      fill.style.backgroundColor = '#e8b86a';
+    } else {
+      badge.className = 'result-badge badge-ng';
+      badge.textContent = '🚨 水分不足まつげ';
+      desc.innerHTML = '<strong>何しても持ち悪い原因ここかも。</strong><br>まず水分から整えることが最優先です！';
+      fill.style.backgroundColor = '#e8856a';
+    }
+  }
+  function resetAll() {
+    document.querySelectorAll('.check-item').forEach(function(el){ el.classList.remove('checked'); });
+    updateResult();
+  }
+</script>
+
+</body>
+</html>
